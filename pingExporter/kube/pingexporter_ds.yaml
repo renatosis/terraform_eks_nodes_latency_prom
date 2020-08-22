@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ping-exporter
+  namespace: prometheus
+spec:
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      name: ping-exporter
+  template:
+    metadata:
+      labels:
+        name: ping-exporter
+    spec:
+      terminationGracePeriodSeconds: 0
+      tolerations:
+      - operator: "Exists"
+      hostNetwork: true
+      serviceAccountName: ping-exporter
+      containers:
+      - image: renatosis/ping-exporter:latest
+        name: ping-exporter
+        env:
+          - name: MY_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: PROMETHEUS_TEXTFILE_DIR
+            value: /node-exporter-textfile/
+          - name: PROMETHEUS_TEXTFILE_PREFIX
+            value: ping-exporter_
+        volumeMounts:
+          - name: textfile
+            mountPath: /node-exporter-textfile
+          - name: config
+            mountPath: /config
+      volumes:
+        - name: textfile
+          hostPath:
+            path: /var/run/node-exporter-textfile
+        - name: config
+          configMap:
+            name: ping-exporter-config
+      imagePullSecrets:
+      - name: private-registry
