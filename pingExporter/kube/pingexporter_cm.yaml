@@ -5,4 +5,4 @@ metadata:
   namespace: prometheus
 data:
   targets.json: |
-    {"cluster_targets":[{"ipAddress":"172.17.0.3","name":"kube-1"},{"ipAddress":"172.17.0.4","name":"kube-1"}],"external_targets":[{"host":"8.8.8.8","name":"google-dns"},{"host":"youtube.com"}]}
+    {"cluster_targets":[{"ipAddress":"10.0.1.107","name":"kube-1-a"},{"ipAddress":"10.0.3.205","name":"kube-2-c"},{"ipAddress":"10.0.3.115","name":"kube-1-c"}],"external_targets":[{"host":"8.8.8.8","name":"google-dns"},{"host":"youtube.com"}]}
