@@ -158,3 +158,5 @@ kube_node_ping_rtt_milliseconds_total{controller_revision_hash="75694cb8c8",dest
 kube_node_ping_rtt_milliseconds_total{controller_revision_hash="75694cb8c8",destination_node="kube-2-c",destination_node_ip_address="10.0.3.205",instance="10.0.3.205:9100",job="kubernetes-pods",kubernetes_namespace="default",kubernetes_pod_name="node-exporter-bqk2g",name="node-exporter",pod_template_generation="1"}	162.8300000000001  
 
 Its possible to see that locally the latency is so low and to the other onde on the same zone has a medium latency. But the latency to the vm on the other zone is huge!  
+
+![Results](https://github.com/renatosis/terraform_eks_nodes_latency_prom/blob/master/result.png "Results")
