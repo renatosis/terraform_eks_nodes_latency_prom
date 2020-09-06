@@ -32,3 +32,5 @@ EKS default cluster was created based on version 1.16
 In order to fix I had to see what was the version supported for apps:
 kubectl api-versions | grep apps
 apps/v1
+
+Somehow the terraform kubernetes autocomplete wasnt working anymore, so I noticed that by removing this folder pn macos ~/Library/Application\ Support/Code/ make it work
