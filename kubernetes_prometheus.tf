@@ -18,7 +18,7 @@ resource "kubernetes_config_map" "prometheus" {
   }
 
   data = {
-    "prometheus.yml" = "${file("${path.module}/config/prometheus.yml")}"
+    "prometheus.yml" = "${path.module}/config/prometheus.yaml"
   }
 }
 
