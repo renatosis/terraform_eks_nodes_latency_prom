@@ -230,4 +230,24 @@ Now its time to make the kconmon to monitor node latencies.
 
 ## Making kconmon work on our kubernetes cluster
 
+Ive got access to the kconmon doc and it says that its better installing kconmon via helm, so lets upgrade helm client and try to run it using terraform  
+https://github.com/Stono/kconmon  
 
+Ive downloaded the kconmon helm chart and created a helm.tf with the helm provisioner and the release. I also had to do a terraform init again  
+
+```
+terraform init
+brew install helm
+terraform apply
+```
+
+After applying the terraform I was able to see the DaemonSet for the kconmon and the results for its nodes' latencies  
+
+Making a query for a specific node I could get the latency(time in milliseconds of a tcp connection) to the same node and all of the other nodes  
+Note that a latency for the node itself is low and to a node within the same zone is low too, but to a node on another zone is "high"  
+
+```
+kconmon_tcp_duration_milliseconds{source="ip-10-0-3-37.sa-east-1.compute.internal"}
+```
+
+![Results](https://github.com/renatosis/terraform_eks_nodes_latency_prom/blob/master/result2.png "Results Using Kconmon")

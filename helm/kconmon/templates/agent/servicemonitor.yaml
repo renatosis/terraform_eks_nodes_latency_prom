@@ -1,0 +1,20 @@
+{{ if .Values.prometheus.enableServiceMonitor }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+{{ include "kconmon.app.labels.standard" . | indent 4 }}
+  name: kconmon-service-monitor
+  namespace: kconmon
+spec:
+  endpoints:
+  - interval: 5s
+    path: /metrics
+    port: http-web
+  namespaceSelector:
+    any: true
+  selector:
+    matchLabels:
+      app: kconmon
+      component: agent
+{{ end }}

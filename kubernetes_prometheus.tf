@@ -1,3 +1,4 @@
+############# Namespace prometheus #############
 
 resource "kubernetes_namespace" "prometheus" {
   metadata {
@@ -11,6 +12,8 @@ resource "kubernetes_namespace" "prometheus" {
   }
 }
 
+############# ConfigMap prometheus #############
+
 resource "kubernetes_config_map" "prometheus" {
   metadata {
     name = "prometheus-config"
@@ -21,6 +24,8 @@ resource "kubernetes_config_map" "prometheus" {
     "prometheus.yml" = file("${path.module}/config/prometheus.yaml")
   }
 }
+
+############# Service prometheus #############
 
 resource "kubernetes_service" "prometheus" {
   metadata {
@@ -40,12 +45,16 @@ resource "kubernetes_service" "prometheus" {
   }
 }
 
+############# ServiceAccount prometheus #############
+
 resource "kubernetes_service_account" "prometheus" {
   metadata {
     name = "prometheus"
     namespace = "prometheus"
   }
 }
+
+############# Deployment prometheus #############
 
 resource "kubernetes_deployment" "prometheus" {
   metadata {
@@ -100,6 +109,8 @@ resource "kubernetes_deployment" "prometheus" {
     }
   }
 }
+
+############# ClusterRole Example #############
 
 resource "kubernetes_cluster_role" "example" {
   metadata {
