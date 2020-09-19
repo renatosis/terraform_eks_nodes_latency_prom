@@ -197,3 +197,37 @@ kube_node_ping_rtt_milliseconds_total{controller_revision_hash="75694cb8c8",dest
 Its possible to see that locally the latency is so low and to the other onde on the same zone has a medium latency. But the latency to the vm on the other zone is huge!  
 
 ![Results](https://github.com/renatosis/terraform_eks_nodes_latency_prom/blob/master/result.png "Results")
+
+## Recreating all kube yamls from yaml to kubernetes terraform provision format
+
+After recreating all kube yaml files in terraform kubernetes provision way I noticed a prometheus deployment timeout. I run terraform output to get the kube eks config to be able to run kube debug commands  
+There was an error running the pod: 
+```
+k logs prometheus-d78bfcf77-rkbj8 -n prometheus
+level=error ts=2020-09-19T20:22:16.377Z caller=main.go:283 msg="Error loading config (--config.file=/etc/prometheus/prometheus.yml)" err="parsing YAML file /etc/prometheus/prometheus.yml: yaml: unmarshal errors:\n  line 1: cannot unmarshal !!str `./confi...` into config.plain"
+```
+
+I also had to limit the timeout which was 10min in the prometheus deployment config: 
+```
+timeouts {
+    create = "1m"
+  }
+```
+
+I noticed that I wasnt using file to get prometheus.yaml locally.  
+After that all of the service discovery targets were 0. 
+
+Running 
+```
+k logs -f prometheus-d78bfcf77-vpwk6
+level=error ts=2020-09-19T20:55:45.273Z caller=manager.go:344 component="discovery manager scrape" msg="Cannot create service discovery" err="open /var/run/secrets/kubernetes.io/serviceaccount/token: no such file or directory" type=*kubernetes.SDConfig
+```
+I was able to see what was the problem  
+
+Then I discovered that there was an option `automount_service_account_token` which was false on the prometheus deployment. I've turned it on configuring `automount_service_account_token = true` and destroying and applying the terraform again.  
+After That I was able to see all of the scraps happening again  
+Now its time to make the kconmon to monitor node latencies.  
+
+## Making kconmon work on our kubernetes cluster
+
+

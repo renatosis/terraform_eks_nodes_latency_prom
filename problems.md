@@ -34,3 +34,7 @@ kubectl api-versions | grep apps
 apps/v1
 
 Somehow the terraform kubernetes autocomplete wasnt working anymore, so I noticed that by removing this folder pn macos ~/Library/Application\ Support/Code/ make it work
+
+
+After recreating all kube yaml files in terraform kubernetes provision way I noticed a prometheus deployment timeout. I run terraform output to get the kube eks config to be able to run kube debug commands
+

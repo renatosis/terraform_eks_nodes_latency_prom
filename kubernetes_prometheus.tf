@@ -18,7 +18,7 @@ resource "kubernetes_config_map" "prometheus" {
   }
 
   data = {
-    "prometheus.yml" = "${path.module}/config/prometheus.yaml"
+    "prometheus.yml" = file("${path.module}/config/prometheus.yaml")
   }
 }
 
@@ -55,6 +55,9 @@ resource "kubernetes_deployment" "prometheus" {
       promlabel = "prometheus"
     }
   }
+  timeouts {
+    create = "1m"
+  }
 
   spec {
     replicas = 1
@@ -73,6 +76,7 @@ resource "kubernetes_deployment" "prometheus" {
       }
 
       spec {
+        automount_service_account_token = true
         service_account_name = "prometheus"
         container {
           name = "prometheus"
